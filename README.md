@@ -1,8 +1,5 @@
 # 🩻 MedCBR: Vision-Language Models Encode Clinical Guidelines for Concept-Based Reasoning
 
-#### Abstract
-Concept Bottleneck Models (CBMs) are a prominent framework for interpretable AI that map learned visual features onto a set of meaningful concepts, to be used for task-specific downstream predictions. Their sequential structure enhances transparency by connecting model predictions to the underlying concepts that support them. In medical imaging, where transparency is essential, CBMs offer an appealing foundation for explainable model design. However, their discrete concept representations overlook broader clinical context such as diagnostic guidelines and expert heuristics, reducing reliability in complex cases. We propose MedCBR, a concept-based reasoning framework that integrates clinical guidelines with vision–language and reasoning models. Labeled clinical descriptors are transformed into guideline-conformant text, and a concept-based model is trained with a multi-task objective combining multi-modal contrastive alignment, concept supervision, and diagnostic classification to jointly ground image features, concepts, and pathology. A reasoning model then converts these predictions into structured clinical narratives that explain the diagnosis, emulating expert reasoning based on established guidelines. MedCBR achieves superior diagnostic and concept-level performance, with AUROCs of 94.2% on ultrasound and 84.0% on mammography. Further experiments were also performed on non-medical datasets, with 86.1% accuracy. Our framework enhances interpretability and forms an end-to-end bridge from medical image analysis to decision-making.
-
 ---
 
 ###  Dataset setup
