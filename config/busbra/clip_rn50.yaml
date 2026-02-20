@@ -1,31 +1,30 @@
 seed: 0
 debug: false
 
-mode: cbm-base
-exp_name: cbm-base
+mode: clip
+exp_name: clip
 checkpoint_dir: /home/ANON-USER/scratch/ckpt/${data.dataset}/${mode}_fold=${data.fold}_j${slurm_job_id}
 save_weights: false
+#checkpoint_dir: null #/h/ANON-USER/medcbr/.ckpt/${slurm_job_id}
 
-pretrained: false
+pretrained: true
 pretraining:
   data: breast
-  style: mae
-
-from_ckpt: /h/ANON-USER/medcbr/_checkpoint/${cbm.backbone}-${pretraining.data}-${pretraining.style}/fold${data.fold}.pth
+  style: clip
+from_ckpt: null # /h/ANON-USER/medcbr/_checkpoint/biomedclip-${pretraining.data}/model_pureclip1.pth
 
 wandb:
   name: ${exp_name}_fold=${data.fold}_slurmid=${slurm_job_id}
   project: MedCBM
-  group: cbm_base
+  group: biomedclip
   tags: 
-  log_images: true
+  log_images: false
 
 slurm:
-  qos: m3
-  mem: 48G
-  gpu: gpu:rtx6000:1
+  qos: m2
+  mem: 32G
+  gpu: gpu:a40:1
   time: 8:00:00
-  cpus: 8
 
 data:
   dataset: BREAST_US
@@ -36,52 +35,58 @@ data:
   sampling: undersample
   sampling_ratio: 1.0
   crop_rois: true # whether to crop the images to the ROIs
-  image_size: 256
-  batch_size: 16
+  image_size: 224
+
+  batch_size: 24
   augmentations:
     - translation
     - rotate
     - flip
 
-  subset_train_data: 1.0
   use_llm_output: false
   datasets: ["BrEaST", "BUSBRA"] # datasets to use, can be ["BrEaST", "BUSBRA", "ALL"]
 
 training:
   num_epochs: 300
   lr_scheduler: cosine
-  pretrained: true
-  from_ckpt: null
+  pretrained: false
+  from_ckpt: /checkpoint/ANON-USER/16902799/model_epoch299_auc0.55.ckpt
   accumulate_grad_steps: 1
 
 optimizer:
   name: adamw
-  encoder_lr: 3e-04
-  main_lr: 3e-04
-  wd: 1e-5 # weight decay
-  encoder_frozen_epochs: 0
-  encoder_warmup_epochs: 5
-  main_frozen_epochs: 0
-  main_warmup_epochs: 5
+  lr: 1e-05
+  wd: 0 # weight decay
+  frozen_epochs: 0
+  warmup_epochs: 30
 
 cbm:
   num_concepts: 15
-  num_birads: 4
   num_classes: 2
+  num_birads: 4
   concepts: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-  backbone: resnet50
-  architecture: base
-  gamma: 5.0
   concept_weights: [1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 5, 2, 1, 1, 1]
+  architecture: multihead # cbl, multihead, fusion
+
+loss:
+  det_loss: ce
+  concept_loss: ce
+  birads_loss: ce
+
+clip:
+  d: 1024
+  embedding_dim: 1024
+  adapter_dim: 1024
+  mode: clip_sup # clip, clip_sup, clip_semi
+  clip_weight: 0.0
+  det_weight: 1.0
+  concept_weight: 0.0
+  birads_weight: 0.0
+  use_llm_output: false
+  backbone: resnet
 
 metrics:
   tune_threshold: true
 
-learning_rate: 0.001
-loss: weighted_multi_task_ce_loss
-
 device: cuda
 use_amp: false
-
-#python3 run.py -o wandb.group=new_losses_rn50_joint data.fold=1 loss=concept_weighted_ce_loss
-#python3 run.py -y cbm_base -o wandb.group=LaBo_CBM_smolGamma cbm.gamma=0.3 loss=unweighted_multi_task_ce_loss data.fold=0
