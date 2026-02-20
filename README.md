@@ -1,7 +1,5 @@
 # 🩻 MedCBR: Vision-Language Models Encode Clinical Guidelines for Concept-Based Reasoning
 
----
-
 ###  Dataset setup
 ##### BUS-BRA
 1. Download the data
