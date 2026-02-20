@@ -79,14 +79,14 @@ cbm:
     310, 311]
   backbone: resnet50
   architecture: cmh
-  gamma: 0.0
+  gamma: 1.0
   concept_weights: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 metrics:
   tune_threshold: true
 
 learning_rate: 0.001
-loss: weighted_multi_task_ce_loss
+loss: ce_and_concept_mse_loss
 
 device: cuda
 use_amp: false
