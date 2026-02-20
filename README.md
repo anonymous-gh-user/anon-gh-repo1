@@ -39,7 +39,6 @@ Our code base supports the following models. Any model not mentioned here was tr
 
 **Concept-based models**:
 - Original CBM (Koh et al., 2020)
-- MTCM
 - CLIP CBM
 
 To run a model using k-fold cross-validation, we used:
